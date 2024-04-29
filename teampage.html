@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://kit.fontawesome.com/680d57b52c.js" crossorigin="anonymous"></script>
+<title>Team Page</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+    }
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+        text-align: center;
+        color: #343a40;
+    }
+    .card {
+        margin-top: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .card-header {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .card-body {
+        padding: 20px;
+    }
+    .card-text {
+        color: #343a40;
+    }
+</style>
+</head>
+<body>
+<div class="container mt-5 text-center">
+    <h1 class="mt-5">Your Details</h1>
+    <!-- <div class="card">
+        <div class="card-header">
+            Form Data
+        </div>
+        <div class="card-body">
+            <p class="card-text"><strong>Full Name:</strong> <span id="fullName"></span></p>
+            <p class="card-text"><strong>Email:</strong> <span id="email"></span></p>
+            <p class="card-text"><strong>Experience:</strong> <span id="experience"></span> years</p>
+            <p class="card-text"><strong>Speciality:</strong> <span id="speciality"></span> </p>
+            <p class="card-text"><strong>Special Dishes:</strong> <span id="dish"></span> </p>
+            <p class="card-text"><strong>Gender:</strong> <span id="gender"></span></p>
+        </div>
+    </div>
+</div> -->
+
+<div class="card ">
+    <div class="card-header">
+        Welcome to CooksOnCall !!
+    </div>
+    <div class="card-body mt-5">
+        <h3>Now you will be able to see your orders and bookings.</h3>
+        <p>You got New Notification.</p>
+        <button class="btn btn-primary"><a href="teamdetails.html" style="color: white;">See Details</a></button>
+
+    </div>
+</div>
+<script>
+     document.addEventListener('DOMContentLoaded', function() {
+        // Retrieve form data from session storage
+        const storedFormData = sessionStorage.getItem('formData');
+        if (storedFormData) {
+            const formData = JSON.parse(storedFormData);
+            displayFormData(formData);
+        }
+    });
+
+    // Function to display form data on the page
+    function displayFormData(formData) {
+        document.getElementById('fullName').textContent = formData.fullName;
+        document.getElementById('email').textContent = formData.email;
+        document.getElementById('experience').textContent = formData.experience;
+        document.getElementById('speciality').textContent = formData.speciality;
+        document.getElementById('dish').textContent = formData.dish;
+        document.getElementById('gender').textContent = formData.gender;
+    }
+
+</script>
+</body>
+</html>

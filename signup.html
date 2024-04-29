@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup</title>
+  <link rel="stylesheet" href="signup.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://kit.fontawesome.com/680d57b52c.js" crossorigin="anonymous"></script>
+  <style>
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .popup-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup mt-0 text-center">
+    <img src="img/cooksoncall.png" alt="Cook on Call Logo" style="width: 200px; height: 200px;">
+    <form id="signupForm" class="forms" action="/signup" method="POST" onsubmit="handleSubmit(event)">
+      <h4 class="text-center">SIGN UP</h4>
+      <i class="fa-regular fa-user"></i> <input type="text"  onchange="handleInput(event)" placeholder="Username" name="username" id="username" required autocomplete="off" class="mt-4"><br>
+      <i class="fa-regular fa-envelope"></i><input type="email"  onchange="handleInput(event)" placeholder="E-mail" name="email" id="email" required autocomplete="off" class="mt-4"><br>
+      <i class="fa-solid fa-lock"></i><input type="password"  onchange="handleInput(event)" placeholder="Password" name="password" id="password" required autocomplete="off" class="mt-4"><br>
+      <p class='text-center'>Are you a Cook or User ? <br>
+        <input type="radio" name="userType" value="Cook">Cook <br>
+        <input type="radio" name="userType" value="User">User
+      </p><br>
+      <button type="submit" class="btn btn-warning text-dark mx-auto d-block px-5">Submit</button>
+    </form>
+  </div>
+  
+  <!-- Popup for signup -->
+  <div id="signupPopup" class="popup">
+    <div class="popup-content">
+      <span class="close" onclick="closePopup('signupPopup')">&times;</span>
+      <h2>Signup Message</h2>
+      <p id="signupMessage"></p>
+    </div>
+  </div>
+
+  <script>
+     function handleInput(event) {
+      let name = event.target.name;
+      let value = event.target.value;
+      setUser({
+        ...user,
+        [name]: value,
+      });
+    }
+
+    const URL = 'http://localhost:5000/api/auth/signup';
+    
+    async function handleSubmit(event) {
+      event.preventDefault();
+      const form = event.target;
+      const user = {
+        username: form.username.value,
+        email: form.email.value,
+        password: form.password.value,
+        userType: form.userType.value
+      };
+
+      try {
+        const response = await fetch(URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(user)
+        });
+
+        const resData = await response.json();
+        console.log("Response from server:", resData);
+
+        if (response.ok) {
+          document.getElementById('signupMessage').innerText = 'Signup Successful!';
+          openPopup('signupPopup');
+          setTimeout(() => {
+            closePopup('signupPopup');
+            window.location.href = "login.html";
+          }, 3000);
+        } else {
+          throw new Error(resData.message || 'Failed to sign up');
+        }
+      } catch (error) {
+        console.error('Signup error:', error);
+        document.getElementById('signupMessage').innerText = error.message;
+        openPopup('signupPopup');
+        setTimeout(() => closePopup('signupPopup'), 3000);
+      }
+    }
+
+    function openPopup(popupId) {
+      document.getElementById(popupId).style.display = "block";
+    }
+
+    function closePopup(popupId) {
+      document.getElementById(popupId).style.display = "none";
+    }
+  </script>
+</body>
+</html>

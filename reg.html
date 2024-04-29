@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="reg.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/680d57b52c.js" crossorigin="anonymous"></script>
+    <title>CooksOnCall</title>
+</head>
+<body>
+    <div class="reg">
+        <img src="img/cooksoncall.png" alt="" style="width: 200px; height: 200px;">
+        <form class="form" id="regForm" onsubmit="handleSubmit(event)">
+            <h4 class="text-center">MODE OF REGISTRATION</h4>
+            <p class='text-center'>Are you want to register as a Single or Team? <br>
+                <input type="radio" name="user" onchange="handleInput(event)" value="Single">Single <br>
+                <input type="radio" name="user" onchange="handleInput(event)" value="Team">Team
+            </p><br>
+            <button type="submit" class="btn btn-info mx-auto d-block px-5">Submit</button>
+        </form>
+    </div>
+
+    <script>
+         function handleInput(event) {
+      let name = event.target.name;
+      let value = event.target.value;
+      setUser({
+        ...user,
+        [name]: value,
+      });
+    }
+
+    async function handleSubmit(event) {
+    event.preventDefault();
+    console.log("Form submitted"); // Debugging: Check if form submission is triggered
+    const formData = new FormData(event.target);
+    const user = {
+        user: formData.get('user')
+    };
+    try {
+        const response = await fetch("http://localhost:5000/api/data/reg", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(user),
+        });
+        console.log("Registration Response:", response); // Debugging: Check response from server
+        const responseData = await response.json();
+        console.log("Registration Data:", responseData); // Debugging: Check data from server
+        if (response.ok) {
+            console.log('Registration successful'); // Debugging: Check if registration is successful
+            if (user.user === 'Team') {
+                window.location.href = "teamreg.html";
+            } else {
+                window.location.href = "cook.html";
+            }
+        } else {
+            throw new Error(responseData.message || 'Registration failed');
+        }
+    } catch (error) {
+        console.error('There was a problem with your fetch operation:', error);
+        document.getElementById('RegMessage').innerText = 'Registration Unsuccessful. Please try again.';
+    }
+}
+
+    </script>
+</body>
+</html>

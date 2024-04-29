@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            background: linear-gradient(rgba(105, 104, 102, 0.9), rgba(235, 190, 98, 0.9)), url('./img/bg-hero.jpg');
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 750px;
+            margin-top: 100px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #343a40;
+        }
+        form {
+            margin-top: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            color: #343a40;
+        }
+        input[type="text"], input[type="email"], input[type="number"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #e68c32;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button[type="submit"]:hover {
+            background-color: #f0926c;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Team Registration Form</h1>
+    <form id="teamForm" enctype="multipart/form-data" action="/api/form/team" method="POST" onsubmit="handleSubmit(event)">
+        <div class="form-group">
+            <label for="fullName">Full Name Of Leader</label>
+            <input type="text" id="fullName" name="fullName" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="team">Name Of Team(if Any)</label>
+            <input type="text" id="team" name="team">
+        </div>
+        <div class="form-group">
+            <label for="experience">Experience (in years)</label>
+            <input type="number" id="experience" name="experience">
+        </div>
+        <div class="form-group">
+            <label for="people">No of people</label>
+            <input type="number" id="people" name="people">
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+    const URL = 'http://localhost:5000/api/form/team';
+
+    let team = {
+        fullName: '',
+        email: '',
+        // experience: '',
+      team: '',
+    
+    };
+
+    // Function to update user state
+    function setTeam(newTeam) {
+        team = { ...team, ...newTeam};
+    }
+
+    // Function to handle input changes
+    function handleInput(event) {
+        let name = event.target.name;
+        let value = event.target.value;
+        setTeam({
+            ...team,
+            [name]: value,
+        });
+    }
+
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+
+        try {
+            const response = await fetch(URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(team),
+            });
+            const res_data = await response.json();
+            console.log('res from server', res_data);
+
+            if (response.ok) {
+                setTeam({
+                    fullName: '',
+                    email: '',
+                    // experience: '',
+                   team: '',
+                });
+                // openPopup('cookPopup');
+                document.getElementById('teamMessage').innerText = 'Team Registered Successfully!';
+                // setTimeout(() => {
+                //     closePopup('cookPopup');
+                    window.location.href = 'teampage.html';
+                // }, 3000);
+            } else {
+                console.log('Error:', res_data.message);
+                
+            }
+        } catch (error) {
+            // console.log('There was a problem with your fetch operation:', error);
+            // // openPopup('cookPopup');
+            // document.getElementById('teamMessage').innerText = 'Team Registration Unsuccessful.';
+            // setTimeout(() => {
+            //     closePopup('cookPopup');
+            // }, 2000);
+        }
+    }
+
+    // Function to open a popup
+    function openPopup(popupId) {
+        var popup = document.getElementById(popupId);
+        popup.style.display = 'block';
+    }
+</script>
+</body>
+</html>
